@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Text Processing | Academic</title>
+    <link>/categories/text-processing/</link>
+      <atom:link href="/categories/text-processing/index.xml" rel="self" type="application/rss+xml" />
+    <description>Text Processing</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sat, 08 Feb 2020 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Text Processing</title>
+      <link>/categories/text-processing/</link>
+    </image>
+    
+    <item>
+      <title>Text Processing Tutorial</title>
+      <link>/post/text_processing/markdown/text-processing-tutorial/</link>
+      <pubDate>Sat, 08 Feb 2020 00:00:00 +0000</pubDate>
+      <guid>/post/text_processing/markdown/text-processing-tutorial/</guid>
+      <description>
+
+
+&lt;div id=&#34;background-information&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Background Information&lt;/h1&gt;
+&lt;p&gt;This is a followup post to &lt;a href=&#34;https://pettitta.github.io/post/mood-and-text-analysis/mood-and-text-analyses/&#34;&gt;this post&lt;/a&gt;, where I presented some preliminary findings on the relationhsip between mobile text data and daily reported mood. However, before I was even able to analyze the data, I had to spend a long time pre-processing the data. I spent a significant chunk of time slogging through an array of different procedures (some good, some horrifically bad), and I finally settled on the ones in this post. This is not the only way, nor even potentially the best way, to process messy text data, but I thought I might make a post in case anyone else wants a resource for processing text data. &lt;strong&gt;Note:&lt;/strong&gt; in order to respect the privacy of the participants, I am unable to show any of the actual text data, as it is highly sensitive and identifiable. I am providing the code, and will provide the output for aggregated data, but I cannot print any output of the raw text data.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Intended audience&lt;/strong&gt;: People learning text processing steps and procedures&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Background knowledge required&lt;/strong&gt;: R (beginner-intermediate), Python (beginner-intermediate)&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;exploring-the-data&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Exploring the data&lt;/h1&gt;
+&lt;p&gt;First, let’s get a sense of the dataset by using the skimr package. It looks like we’ve got about 446,182 rows of data and 5 columns of data. Participant_id is, obviously, the Participant ID, text is a character string containing actual text content, and app variable is which app the text was entered into. The variables timestamp_est and date both POSIXct variables (time variables), and they are the specific time the text was entered and the date it was entered on, respectively.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;skimr::skim(raw_text_data) &lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;caption&gt;(#tab:exploring dataset 1)Data summary&lt;/caption&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Name&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;raw_text_data&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Number of rows&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;446182&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Number of columns&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;5&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;_______________________&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Column type frequency:&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;character&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;3&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;POSIXct&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;________________________&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Group variables&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;None&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;Variable type: character&lt;/strong&gt;&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;left&#34;&gt;skim_variable&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;n_missing&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;complete_rate&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;min&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;max&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;empty&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;n_unique&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;whitespace&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;participant_id&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;4&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;4&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;64&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;text&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;745&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;11790&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;284491&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;34&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;app&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;2&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;61&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;602&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;Variable type: POSIXct&lt;/strong&gt;&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;left&#34;&gt;skim_variable&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;n_missing&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;complete_rate&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;min&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;max&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;median&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;n_unique&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;timestamp_est&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;8&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;2018-11-16 19:01:00&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;2019-12-17 13:53:00&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;2019-08-30 23:54:30&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;158814&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;date&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;8&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;2018-11-17 00:00:00&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;2019-12-17 00:00:00&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;2019-08-31 00:00:00&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;391&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;This next chunk of code will give us a good example of what the most common sayings are in the data. This is an important step, because if there are systematic artifacts in the data, this is one way we can quickly spot it. Because of participant privacy, I won’t be able to show you the output of the individual messages, but I can present the code for how to do do it.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;raw_text_data %&amp;gt;%
+  count(text) %&amp;gt;%
+  arrange(desc(n)) %&amp;gt;%
+  slice(1:200) %&amp;gt;%
+  knitr::kable() %&amp;gt;% # the following two lines of code aren&amp;#39;t necessary,  
+  kableExtra::kable_styling(full_width = F,position=&amp;quot;left&amp;quot;) # they just make it prettier&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Based on the output, I’m glad I included this step. There are some unsurprising findings, such as “Ok” (5103 messages) and “No” (1191 messages). However, we also have a lot of junk from the keyboard like “Send a chat” (17308 messages) and “Type a message” (5103 messages). Next, it will be important to sift through all of the top messages and remove any that are obviously just artifacts generated from apps and not something that an individual actually typed.&lt;/p&gt;
+&lt;div id=&#34;removing-app-artifacts&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Removing App Artifacts&lt;/h2&gt;
+&lt;p&gt;As you can see below, I’ve created a list of common artifactual messages. Now my goal is to remove these completely from the dataset. I’m sure there’s a more efficient way of doing this than indexing through each phrase, but after a lot of trial and error, the following approached worked for me.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Create a vector of messages to be removed
+stuff_to_remove &amp;lt;- c(&amp;quot;Send a chat&amp;quot;,&amp;quot;Enter message&amp;quot;,&amp;quot;Say something in pizza_suplex&amp;#39;s chat&amp;quot;,&amp;quot;Search or type web address&amp;quot;,&amp;quot;Search or enter URL&amp;quot;,&amp;quot;Type a message&amp;quot;,&amp;quot;Search YouTube&amp;quot;,&amp;quot;Say your thing&amp;quot;,&amp;quot;Write a message&amp;quot;,&amp;quot;Shantii.thedubb&amp;quot;,&amp;quot;Type search keywords&amp;quot;,&amp;quot;Type a messageâ€¦&amp;quot;,&amp;quot;Add text&amp;quot;,&amp;quot;Type something ...&amp;quot;,&amp;quot;Messageâ€¦&amp;quot;,&amp;quot;MessageÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦&amp;quot;,&amp;quot;6202004&amp;quot;,&amp;quot;ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢&amp;quot;,&amp;quot;Text message&amp;quot;,&amp;quot;SearchÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦&amp;quot;,&amp;quot;Searchâ€¦&amp;quot;,&amp;quot;Start a message&amp;quot;,&amp;quot;united.com&amp;quot;,&amp;quot;Search for a user&amp;quot;, &amp;quot;Type message&amp;quot;,&amp;quot;Type a messageâ€¦&amp;quot;,&amp;quot;Enter message&amp;quot;)
+
+# Iterate through the list of items to be removed and filter it from the dataset
+
+for(i in stuff_to_remove){
+  raw_text_data &amp;lt;- raw_text_data %&amp;gt;% filter(!str_detect(text, i))
+}
+stored_data &amp;lt;- raw_text_data&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Well, we started out with 446,182 different messages, but after this process, we’re down to 414,375. Over 31,000 text massages alone were just artificially generated by apps–that’s over 7%! That could’ve added a lot of noise to the data, so it’s good we checked. There’s still PLENTY of processing to do. However, up until now, we’ve been working solely in R. While R is great for many things, I’ve found that Python offers a lot of tools for processing text data that R simply does not.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;processing-in-python&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Processing in Python&lt;/h1&gt;
+&lt;p&gt;Let’s switch over to python. In order to do that, let’s use the feather package to transfer data files between R and Python.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(feather)
+
+# we&amp;#39;ll call it unprocessed_text_data and save it in the data folder within the larger project folder
+
+write_feather(raw_text_data, here(&amp;quot;/data/unprocessed_text_data&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Okay, now that we’ve done that, let’s load the data into Python as a pandas dataframe.&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;import pandas as pd
+import feather
+
+data = pd.read_feather(&amp;quot;/Users/Adam/Documents/github/text_processing/data/unprocessed_text_data&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now let’s just do a sanity check and make sure that the data is what we think it is.&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;data.info()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## &amp;lt;class &amp;#39;pandas.core.frame.DataFrame&amp;#39;&amp;gt;
+## RangeIndex: 414375 entries, 0 to 414374
+## Data columns (total 5 columns):
+## participant_id    414375 non-null object
+## text              414375 non-null object
+## app               414375 non-null object
+## timestamp_est     414367 non-null datetime64[ns, UTC]
+## date              414367 non-null datetime64[ns, UTC]
+## dtypes: datetime64[ns, UTC](2), object(3)
+## memory usage: 15.8+ MB&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;subsetting-social-texts&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Subsetting Social Texts&lt;/h2&gt;
+&lt;p&gt;Great, no surprises! For my particular analysis, I’m interested in text that was &lt;em&gt;only&lt;/em&gt; entered into the keyboard on social communication apps (e.g., instagram, facebook, SMS). I’ve gone through and created a list of all the social communication apps in our dataset. I’ll use that list and filter out any text that is coming from non-social apps.&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;apps=[&amp;quot;com.apple.MobileSMS.MessagesNotificationExtension&amp;quot;,&amp;quot;com.apple.MobileSMS&amp;quot;,&amp;quot;com.toyopagroup.picaboo&amp;quot;,&amp;quot;com.burbn.instagram&amp;quot;,&amp;quot;com.apple.MobileSMS.MessagesNotificationExtension&amp;quot;,&amp;quot;com.atebits.Tweetie2&amp;quot;,&amp;quot;com.facebook.Messenger&amp;quot;,&amp;quot;com.hookupdating&amp;quot;,&amp;quot;com.grindrguy.grindrx&amp;quot;,&amp;quot;com.groupme.iphone-app&amp;quot;,&amp;quot;com.gamerdelights.gamepigeon.ext&amp;quot;,&amp;quot;com.apple.mobilesms.compose&amp;quot;,&amp;quot;com.cardify.tinder&amp;quot;,&amp;quot;com.atebits.Tweetie2&amp;quot;,&amp;quot;com.reddit.Reddit&amp;quot;,&amp;quot;com.facebook.Facebook&amp;quot;,&amp;quot;com.burbn.instagram&amp;quot;,&amp;quot;com.facebook.katana&amp;quot;,&amp;quot;com.tumblr&amp;quot;,&amp;quot;tv.twitch.android.app&amp;quot;,&amp;quot;com.instagram.android&amp;quot;,&amp;quot;com.twitter.android&amp;quot;,&amp;quot;com.grindrguy.grindrx&amp;quot;,&amp;quot;com.Popshow.YOLO&amp;quot;,&amp;quot;net.whatsapp.WhatsApp&amp;quot;,&amp;quot;com.moxco.bumble&amp;quot;,&amp;quot;com.groupme.iphone-app.sharing-ext&amp;quot;,&amp;quot;com.apple.MailCompositionService&amp;quot;,&amp;quot;com.cardify.tinder&amp;quot;,&amp;quot;com.apple.mobilesms.compose&amp;quot;,&amp;quot;com.facebook.Messenger&amp;quot;,&amp;quot;com.apple.MobileSMS.MessagesNotificationExtension&amp;quot;,&amp;quot;com.apple.mobilemail&amp;quot;,&amp;quot;com.toyopagroup.picaboo&amp;quot;,&amp;quot;com.apple.MobileSMS&amp;quot;,&amp;quot;com.samsung.android.messaging&amp;quot;,&amp;quot;com.discord&amp;quot;,&amp;quot;com.snapchat.android&amp;quot;,&amp;quot;com.whatsapp&amp;quot;,&amp;quot;com.lipsisoftware.lipsi&amp;quot;,&amp;quot;com.facebook.orca&amp;quot;,&amp;quot;com.android.mms&amp;quot;,&amp;quot;com.google.android.talk&amp;quot;,&amp;quot;com.google.android.apps.messaging&amp;quot;,&amp;quot;com.google.Gmail&amp;quot;,&amp;quot;co.hinge.mobile.ios&amp;quot;,&amp;quot;com.htc.sense.mms&amp;quot;,&amp;quot;com.wemesh.android&amp;quot;]
+
+data = data[data.app.isin(apps)]&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;A quick check shows that there are still 356,502 messages left after removing non-social keyboard entries. Over 86% of text that these teens are entering in their keyboard are within social communication apps. It looks as though the vast majority of text being entered into phones, at least in this sample of adolescents, are on social apps. I’ve created a simple stacked bargraph in R to depict this.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;social_media &amp;lt;-c(&amp;quot;com.apple.MobileSMS.MessagesNotificationExtension&amp;quot;,&amp;quot;com.apple.MobileSMS&amp;quot;,&amp;quot;com.toyopagroup.picaboo&amp;quot;,&amp;quot;com.burbn.instagram&amp;quot;,&amp;quot;com.apple.MobileSMS.MessagesNotificationExtension&amp;quot;,&amp;quot;com.atebits.Tweetie2&amp;quot;,&amp;quot;com.facebook.Messenger&amp;quot;,&amp;quot;com.hookupdating&amp;quot;,&amp;quot;com.grindrguy.grindrx&amp;quot;,&amp;quot;com.groupme.iphone-app&amp;quot;,&amp;quot;com.gamerdelights.gamepigeon.ext&amp;quot;,&amp;quot;com.apple.mobilesms.compose&amp;quot;,&amp;quot;com.cardify.tinder&amp;quot;,&amp;quot;com.atebits.Tweetie2&amp;quot;,&amp;quot;com.reddit.Reddit&amp;quot;,&amp;quot;com.facebook.Facebook&amp;quot;,&amp;quot;com.burbn.instagram&amp;quot;,&amp;quot;com.facebook.katana&amp;quot;,&amp;quot;com.tumblr&amp;quot;,&amp;quot;tv.twitch.android.app&amp;quot;,&amp;quot;com.instagram.android&amp;quot;,&amp;quot;com.twitter.android&amp;quot;,&amp;quot;com.grindrguy.grindrx&amp;quot;,&amp;quot;com.Popshow.YOLO&amp;quot;,&amp;quot;net.whatsapp.WhatsApp&amp;quot;,&amp;quot;com.moxco.bumble&amp;quot;,&amp;quot;com.groupme.iphone-app.sharing-ext&amp;quot;,&amp;quot;com.apple.MailCompositionService&amp;quot;,&amp;quot;com.cardify.tinder&amp;quot;,&amp;quot;com.apple.mobilesms.compose&amp;quot;,&amp;quot;com.facebook.Messenger&amp;quot;,&amp;quot;com.apple.MobileSMS.MessagesNotificationExtension&amp;quot;,&amp;quot;com.apple.mobilemail&amp;quot;,&amp;quot;com.toyopagroup.picaboo&amp;quot;,&amp;quot;com.apple.MobileSMS&amp;quot;,&amp;quot;com.samsung.android.messaging&amp;quot;,&amp;quot;com.discord&amp;quot;,&amp;quot;com.snapchat.android&amp;quot;,&amp;quot;com.whatsapp&amp;quot;,&amp;quot;com.lipsisoftware.lipsi&amp;quot;,&amp;quot;com.facebook.orca&amp;quot;,&amp;quot;com.android.mms&amp;quot;,&amp;quot;com.google.android.talk&amp;quot;,&amp;quot;com.google.android.apps.messaging&amp;quot;,&amp;quot;com.google.Gmail&amp;quot;,&amp;quot;co.hinge.mobile.ios&amp;quot;,&amp;quot;com.htc.sense.mms&amp;quot;,&amp;quot;com.wemesh.android&amp;quot;)
+
+raw_text_data$app_new &amp;lt;- ifelse(raw_text_data$app %in% social_media,&amp;quot;social&amp;quot;,&amp;quot;non-social&amp;quot;)
+
+raw_text_data %&amp;gt;%
+  group_by(app_new) %&amp;gt;%
+  summarise(Percentage=n()) %&amp;gt;%
+  mutate(Percentage=Percentage/sum(Percentage)*100) %&amp;gt;%
+  mutate(text_source=&amp;quot;text_source&amp;quot;) %&amp;gt;%
+  ggplot(aes(fill=app_new,y=Percentage,x=text_source)) +
+  geom_bar(position=&amp;quot;stack&amp;quot;,stat=&amp;quot;identity&amp;quot;,width=.25) +
+  theme(aspect.ratio = 2/1.9,legend.position = c(0.9, 0.5)) +
+  ylab(&amp;quot;Percentage&amp;quot;) +
+  xlab(&amp;quot;Text Source&amp;quot;) + 
+  scale_fill_discrete(labels = c(&amp;#39;Non-Social Apps&amp;#39;,&amp;#39;Social Apps&amp;#39;)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+  panel.background = element_blank(), axis.line = element_line(colour = &amp;quot;black&amp;quot;),axis.text.x=element_blank())&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/text_processing/Markdown/text_processing_tutorial_files/figure-html/creating%20a%20proportion%20graph-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;cleaning-the-text-data&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Cleaning the Text Data&lt;/h2&gt;
+&lt;div id=&#34;removing-emojis-and-other-odd-strings&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Removing Emojis and Other Odd Strings&lt;/h3&gt;
+&lt;p&gt;If you noticed earlier, there were a bunch of text messages that contained some weird characters (e.g., ðŸ˜). These characters are most likely emojis. Now, there’s a lot of things we can do with emojis, but for today we’re just going to remove them. I’ll probably make another post later on how we can incorporate emojis into our processing and subsequent analyses. For now, though, let’s get rid of them. First, we have to encode the characters into utf8. I’ve extracted a string with only the characters in order to demonstrate what the code is doing. The character string originally is “‘ðŸ’•ðŸ’•‘“. Let’s take a look at what the function encodes”’ðŸ’•ðŸ’•’” as.&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;encoded_data = data[&amp;#39;text&amp;#39;].apply(lambda x: x.encode(&amp;#39;utf8&amp;#39;,errors=&amp;#39;backslashreplace&amp;#39;))
+
+encoded_data[2035]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## b&amp;#39;\xc3\xb0\xc5\xb8\xe2\x80\x99\xe2\x80\xa2\xc3\xb0\xc5\xb8\xe2\x80\x99\xe2\x80\xa2&amp;#39;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Okay! Now we can see that it’s encoded as a long string of characters with a b at the front. Now what we’re going to do is encode it as ascii and it and remove any instances of these odd strings of characters. As you can see, we’re left with an empty string (except for with a ‘b’ in front).&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;re_encoded_data= encoded_data.apply(lambda x: x.decode(&amp;#39;unicode_escape&amp;#39;,errors=&amp;#39;backslashreplace&amp;#39;).encode(&amp;#39;ascii&amp;#39;, &amp;#39;ignore&amp;#39;).strip())
+
+re_encoded_data[2035]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## b&amp;#39;&amp;#39;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;In order to get rid of the ‘b’, we have to decode the text back out of utf8. Now, when we print what was once “‘ðŸ’•ðŸ’•’”, we get a blank cell! Let’s make sure not to forget to put the processed text back into the dataframe&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;de_coded_data = re_encoded_data.apply(lambda x: x.decode(&amp;#39;utf8&amp;#39;))
+de_coded_data[2035]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## &amp;#39;&amp;#39;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;data[&amp;#39;text&amp;#39;] = de_coded_data&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;removing-contractions&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Removing Contractions&lt;/h3&gt;
+&lt;p&gt;Another thing, before we get rid of special characters in the data, is to remove contractions like “can’t” and “won’t.” In order to do this, we can use the contractions library. If you supply a contraction to the function, like this &lt;code&gt;contraction.fix(&amp;quot;won&#39;t&amp;quot;)&lt;/code&gt;, the output will be “will not”. But we want to make sure to do it to all of the contractions within the entire column, so we’ll have to apply a function to do that.&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;import contractions
+data[&amp;#39;text&amp;#39;] = data[&amp;#39;text&amp;#39;].apply(lambda x: [contractions.fix(word) for word in x.split()])
+data[&amp;#39;text&amp;#39;] = [&amp;#39; &amp;#39;.join(map(str,l)) for l in data[&amp;#39;text&amp;#39;]]&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;em&gt;An important note&lt;/em&gt;: I hope this is demonstrating why the order of steps taken during the processing of the data matters. If we were to remove special characters first (“can’t” becomes “cant”, and “we’re” becomes “were”), the contractions.fix() function would be relatively useless, as it uses those special characters to know when to expand the contractions.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;miscellaneous-cleaning&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Miscellaneous Cleaning&lt;/h3&gt;
+&lt;p&gt;Next, we’re going to do some standard processing procedures to the text. We’re going to 1) Remove all the special characters, 2) replace multiple spaces with a single space, 3) remove any ‘b’ prefixes if there are any, and change everything to lowercase. I will hash out options for removing single characters, but I’m not going to use them, as I think single character words will be important for my specific analyses.&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;import re
+for sentence in range(0, len(data.loc[:,&amp;#39;text&amp;#39;])):
+    # Remove all the special characters
+    processed_feature = re.sub(r&amp;#39;\W&amp;#39;, &amp;#39; &amp;#39;, str(data.loc[:,&amp;#39;text&amp;#39;].values[sentence]))
+
+    # remove all single characters
+    #processed_feature= re.sub(r&amp;#39;\s+[a-zA-Z]\s+&amp;#39;, &amp;#39; &amp;#39;, processed_feature)
+
+    # Remove single characters from the start
+    #processed_feature = re.sub(r&amp;#39;\^[a-zA-Z]\s+&amp;#39;, &amp;#39; &amp;#39;, processed_feature) 
+
+    # Substituting multiple spaces with single space
+    processed_feature = re.sub(r&amp;#39;\s+&amp;#39;, &amp;#39; &amp;#39;, processed_feature, flags=re.I)
+
+    # Removing prefixed &amp;#39;b&amp;#39;
+    processed_feature = re.sub(r&amp;#39;^b\s+&amp;#39;, &amp;#39;&amp;#39;, processed_feature)
+
+    # Converting to Lowercase
+    processed_feature = processed_feature.lower()
+
+    data.loc[:,&amp;#39;text&amp;#39;].values[sentence]= processed_feature&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;fixing-misspellings&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Fixing Misspellings&lt;/h3&gt;
+&lt;p&gt;Because this data is from keyboards, there are a LOT of typos currently. While there are a lot of ways to do this, I’ve (only slightly) adapted a script I found from &lt;a href=&#34;&amp;#39;https://davidkoh.me/understanding-the-basics-of-text-correction-in-the-context-of-ecommerce-search/&amp;#39;&#34;&gt;this wonderful blog&lt;/a&gt;. Essentially, if you feed it a word like ‘alptop’ it will correct it to ‘laptop.’ While it’s not perfect, it seems to be best trade-off between accuracy and efficiency. Many of the options I tried were fast but inaccurate, or the opposite. For example machine learning would be very accurate, but take far too long.&lt;/p&gt;
+&lt;p&gt;Ultimately, I decided to do use this text correction function because I think it’s important that “sorry” and “srory” be seen as the same thing (by correcting the latter). We might introduce a little noise into the data by incorrectly classifying some data, but after exploring the data, it’s clear that this is doing an overall good job of correcting misspellings.&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;from pyxdameraulevenshtein import damerau_levenshtein_distance
+# The frequent dictionary was obtained from https://github.com/wolfgarbe/symspell and is the intersection 
+# of Google Books Ngram Data and Spell Checker Oriented Word Lists
+# Download it directly here https://github.com/wolfgarbe/SymSpell/blob/master/SymSpell/frequency_dictionary_en_82_765.txt
+fname = &amp;quot;/Users/Adam/Documents/github/text_processing/data/frequency_dictionary_en_82_765.txt&amp;quot;
+dictionary = {}
+
+def get_deletes_list(w, delete_distance):
+    &amp;quot;&amp;quot;&amp;quot;to return all possible combinations of the string with x number of deletes&amp;quot;&amp;quot;&amp;quot;
+    master_deletes_list = []
+    queue = [w]
+    
+    for x in range(delete_distance):
+        temporary_queue = []
+        
+        for word in queue:
+            if len(word)&amp;gt;delete_distance:
+                for c in range(len(word)):
+                    word_minus_c = word[:c] + word[c+1:]
+                    if word_minus_c not in master_deletes_list:
+                        master_deletes_list.append(word_minus_c)
+                    if word_minus_c not in temporary_queue:
+                        temporary_queue.append(word_minus_c)
+        queue = temporary_queue
+        
+    return master_deletes_list
+
+    
+def create_dictionary_entry(w,frequency):
+    &amp;quot;&amp;quot;&amp;quot;
+    the dictionary will be in the format of {&amp;quot;key&amp;quot;:[[autocorrected word 1, autocorrected word 2, etc],frequency}
+    &amp;quot;&amp;quot;&amp;quot;
+    #Add the word
+    if w not in dictionary:
+        dictionary[w] = [[w],frequency]   
+    else:
+        dictionary[w][0].append(w)
+        dictionary[w] = [dictionary[w][0],frequency]  
+    deletes_list = get_deletes_list(w,2)
+
+    for word in deletes_list:
+        if word not in dictionary:
+            dictionary[word] = [[w],0]
+        else:
+            dictionary[word][0].append(w)
+
+def create_dictionary(fname):
+    total_frequency =0
+    with open(fname) as file:
+        for line in file:
+            create_dictionary_entry(line.split()[0],line.split()[1])
+    for keyword in dictionary:
+        total_frequency += float(dictionary[keyword][1])
+    for keyword in dictionary:
+        dictionary[keyword].append(float(dictionary[keyword][1])/float(total_frequency))
+
+
+def get_suggestions(w):
+    search_deletes_list = get_deletes_list(w,2)
+    search_deletes_list.append(w)
+    candidate_corrections = []
+    
+    #Does not correct words which are existing in the dictionary and that has a high frequency based on the word corpus
+    if w in dictionary and int(dictionary[w][1])&amp;gt;10000:
+        return [[w]]
+    else:
+        for query in search_deletes_list:
+            if query in dictionary:
+                for suggested_word in dictionary[query][0]:
+                        edit_distance = float(damerau_levenshtein_distance(w, suggested_word))
+                        frequency = float(dictionary[suggested_word][1])
+                        probability = float(dictionary[suggested_word][2])
+                        score = frequency*(0.003**(edit_distance))
+                        
+                        candidate_corrections.append((suggested_word,frequency,edit_distance,score))
+
+        candidate_corrections = sorted(candidate_corrections, key=lambda x:int(x[3]), reverse=True)
+        return candidate_corrections
+
+    
+def get_correction(w):
+    
+    try:
+        return get_suggestions(w)[0][0]
+    except:
+        return w
+
+    &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now that the function is defined, we can go ahead and run it to correct all of the misspellings! It would be nice if we could just do &lt;code&gt;get_corrections(data[&#39;text&#39;])&lt;/code&gt;, but unfortunately, that won’t work. Again, we’ll have to apply a function to apply it to all words within all cells within the column. Unfortunately, this function returns every cell like this: [‘this’,‘is’,‘one’,‘text’,‘message’], so we’ll have to apply another function in order bring all those pesky characters back into a single message, like this: [“this is one text message”].&lt;/p&gt;
+&lt;pre class=&#34;python&#34;&gt;&lt;code&gt;data[&amp;#39;text&amp;#39;] = data[&amp;#39;text&amp;#39;].apply(lambda x: [get_correction(word) for word in x.split()])
+
+data[&amp;#39;text&amp;#39;] = [&amp;#39; &amp;#39;.join(map(str,l)) for l in data[&amp;#39;text&amp;#39;]]&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;conclusion&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;Okay! I know you haven’t been able to view the raw output of the data, but after following all of these steps, the text data has been thoroughly preprocessed. While there are other aspects of processing (such as stemming and tokenizing) that we haven’t done today, that’s because the subsequent analyses (which I will make another tutorial post for) so far have not called for it. Hopefully this was a helpful guide for anyone looking to process messy text data.&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

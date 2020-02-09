@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 4.7.0">
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Adam Pettitt">
+
+  
+  
+  
+    
+  
+  <meta name="description" content="Background Information This is a followup post to this post, where I presented some preliminary findings on the relationhsip between mobile text data and daily reported mood. However, before I was even able to analyze the data, I had to spend a long time pre-processing the data. I spent a significant chunk of time slogging through an array of different procedures (some good, some horrifically bad), and I finally settled on the ones in this post.">
+
+  
+  <link rel="alternate" hreflang="en-us" href="/post/text_processing/markdown/text-processing-tutorial/">
+
+  
+
+
+  
+  
+  
+  <meta name="theme-color" content="#3f51b5">
+  
+
+  
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/github.min.css" crossorigin="anonymous" title="hl-light">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" disabled>
+        
+      
+    
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css" integrity="sha256-SHMGCYmST46SoyGgo4YR/9AlK1vf3ff84Aq9yK4hdqM=" crossorigin="anonymous">
+    
+
+    
+
+    
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.1.2/lazysizes.min.js" integrity="sha256-Md1qLToewPeKjfAHU1zyPwOutccPAm5tahnaw7Osw0A=" crossorigin="anonymous" async></script>
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+        
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap">
+  
+
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/academic.css">
+
+  
+
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-156892265-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag() {
+      dataLayer.push(arguments);
+  }
+
+  function trackOutboundLink(url) {
+    gtag('event', 'click', {
+         'event_category': 'outbound',
+         'event_label': url,
+         'transport_type': 'beacon',
+         'event_callback': function () {
+           document.location = url;
+         }
+    });
+    console.debug("Outbound link clicked: " + url);
+  }
+
+  function onClickCallback(event) {
+    if ((event.target.tagName !== 'A') || (event.target.host === window.location.host)) {
+      return;
+    }
+    trackOutboundLink(event.target);  
+  }
+
+  gtag('js', new Date());
+  gtag('config', 'UA-156892265-1', {});
+
+  
+  document.addEventListener('click', onClickCallback, false);
+</script>
+
+
+  
+
+
+  
+
+  <link rel="manifest" href="/index.webmanifest">
+  <link rel="icon" type="image/png" href="/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_32x32_fill_lanczos_center_2.png">
+  <link rel="apple-touch-icon" type="image/png" href="/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_192x192_fill_lanczos_center_2.png">
+
+  <link rel="canonical" href="/post/text_processing/markdown/text-processing-tutorial/">
+
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  <meta property="twitter:card" content="summary">
+  
+  <meta property="twitter:site" content="@adampettitt89">
+  <meta property="twitter:creator" content="@adampettitt89">
+  
+  <meta property="og:site_name" content="Academic">
+  <meta property="og:url" content="/post/text_processing/markdown/text-processing-tutorial/">
+  <meta property="og:title" content="A Guide To Processing Messy Text Data Collected From Mobile Phones | Academic">
+  <meta property="og:description" content="Background Information This is a followup post to this post, where I presented some preliminary findings on the relationhsip between mobile text data and daily reported mood. However, before I was even able to analyze the data, I had to spend a long time pre-processing the data. I spent a significant chunk of time slogging through an array of different procedures (some good, some horrifically bad), and I finally settled on the ones in this post."><meta property="og:image" content="img/map[gravatar:%!s(bool=false) shape:circle]">
+  <meta property="twitter:image" content="img/map[gravatar:%!s(bool=false) shape:circle]"><meta property="og:locale" content="en-us">
+  
+    
+      <meta property="article:published_time" content="2020-02-08T00:00:00&#43;00:00">
+    
+    <meta property="article:modified_time" content="2020-02-08T14:58:38-08:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/post/text_processing/markdown/text-processing-tutorial/"
+  },
+  "headline": "A Guide To Processing Messy Text Data Collected From Mobile Phones",
+  
+  "datePublished": "2020-02-08T00:00:00Z",
+  "dateModified": "2020-02-08T14:58:38-08:00",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Adam Pettitt"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "Academic",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "img//"
+    }
+  },
+  "description": "Background Information This is a followup post to this post, where I presented some preliminary findings on the relationhsip between mobile text data and daily reported mood. However, before I was even able to analyze the data, I had to spend a long time pre-processing the data. I spent a significant chunk of time slogging through an array of different procedures (some good, some horrifically bad), and I finally settled on the ones in this post."
+}
+</script>
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  <title>A Guide To Processing Messy Text Data Collected From Mobile Phones | Academic</title>
+
+</head>
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" >
+
+  <aside class="search-results" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search">
+        
+      </div>
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+  
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="/">Academic</a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="/">Academic</a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#about"><span>Home</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#posts"><span>Posts</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#projects"><span>Projects</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#featured"><span>Publications</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#contact"><span>Contact</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>A Guide To Processing Messy Text Data Collected From Mobile Phones</h1>
+
+  
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+          Last updated on
+      
+    
+    Feb 8, 2020
+  </span>
+  
+
+  
+
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <a href="/post/text_processing/markdown/text-processing-tutorial/#disqus_thread"></a>
+  
+
+  
+  
+
+</div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      
+
+
+<div id="background-information" class="section level2">
+<h2>Background Information</h2>
+<p>This is a followup post to <a href="https://pettitta.github.io/post/mood-and-text-analysis/mood-and-text-analyses/">this post</a>, where I presented some preliminary findings on the relationhsip between mobile text data and daily reported mood. However, before I was even able to analyze the data, I had to spend a long time pre-processing the data. I spent a significant chunk of time slogging through an array of different procedures (some good, some horrifically bad), and I finally settled on the ones in this post. This is not the only way, nor even potentially the best way, to process messy text data, but I thought I might make a post in case anyone else wants a resource for processing text data. <strong>Note:</strong> in order to respect the privacy of the participants, I am unable to show any of the actual text data, as it is highly sensitive and identifiable. I am providing the code, and will provide the output for aggregated data, but I cannot print any output of the raw text data.</p>
+<p><strong>Intended audience</strong>: People learning text processing steps and procedures</p>
+<p><strong>Suggested background knowledge</strong>: R (beginner-intermediate), Python (beginner-intermediate)</p>
+</div>
+<div id="exploring-the-data" class="section level2">
+<h2>Exploring the data</h2>
+<p>First, let’s get a sense of the dataset by using the skimr package. It looks like we’ve got about 446,182 rows of data and 5 columns of data. Participant_id is, obviously, the Participant ID, text is a character string containing actual text content, and app variable is which app the text was entered into. The variables timestamp_est and date both POSIXct variables (time variables), and they are the specific time the text was entered and the date it was entered on, respectively.</p>
+<pre class="r"><code>skimr::skim(raw_text_data) </code></pre>
+<table>
+<caption>(#tab:exploring dataset 1)Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">raw_text_data</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">446182</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">5</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">character</td>
+<td align="left">3</td>
+</tr>
+<tr class="odd">
+<td align="left">POSIXct</td>
+<td align="left">2</td>
+</tr>
+<tr class="even">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">empty</th>
+<th align="right">n_unique</th>
+<th align="right">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">participant_id</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">4</td>
+<td align="right">0</td>
+<td align="right">64</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">text</td>
+<td align="right">745</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">11790</td>
+<td align="right">0</td>
+<td align="right">284491</td>
+<td align="right">34</td>
+</tr>
+<tr class="odd">
+<td align="left">app</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">61</td>
+<td align="right">0</td>
+<td align="right">602</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: POSIXct</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">max</th>
+<th align="left">median</th>
+<th align="right">n_unique</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">timestamp_est</td>
+<td align="right">8</td>
+<td align="right">1</td>
+<td align="left">2018-11-16 19:01:00</td>
+<td align="left">2019-12-17 13:53:00</td>
+<td align="left">2019-08-30 23:54:30</td>
+<td align="right">158814</td>
+</tr>
+<tr class="even">
+<td align="left">date</td>
+<td align="right">8</td>
+<td align="right">1</td>
+<td align="left">2018-11-17 00:00:00</td>
+<td align="left">2019-12-17 00:00:00</td>
+<td align="left">2019-08-31 00:00:00</td>
+<td align="right">391</td>
+</tr>
+</tbody>
+</table>
+<p>This next chunk of code will give us a good example of what the most common sayings are in the data. This is an important step, because if there are systematic artifacts in the data, this is one way we can quickly spot it. Because of participant privacy, I won’t be able to show you the output of the individual messages, but I can present the code for how to do do it.</p>
+<pre class="r"><code>raw_text_data %&gt;%
+  count(text) %&gt;%
+  arrange(desc(n)) %&gt;%
+  slice(1:200) %&gt;%
+  knitr::kable() %&gt;% # the following two lines of code aren&#39;t necessary,  
+  kableExtra::kable_styling(full_width = F,position=&quot;left&quot;) # they just make it prettier</code></pre>
+<p>Based on the output, I’m glad I included this step. There are some unsurprising findings, such as “Ok” (5103 messages) and “No” (1191 messages). However, we also have a lot of junk from the keyboard like “Send a chat” (17308 messages) and “Type a message” (5103 messages). Next, it will be important to sift through all of the top messages and remove any that are obviously just artifacts generated from apps and not something that an individual actually typed.</p>
+<div id="removing-app-artifacts" class="section level3">
+<h3>Removing App Artifacts</h3>
+<p>As you can see below, I’ve created a list of common artifactual messages. Now my goal is to remove these completely from the dataset. I’m sure there’s a more efficient way of doing this than indexing through each phrase, but after a lot of trial and error, the following approached worked for me.</p>
+<pre class="r"><code># Create a vector of messages to be removed
+stuff_to_remove &lt;- c(&quot;Send a chat&quot;,&quot;Enter message&quot;,&quot;Say something in pizza_suplex&#39;s chat&quot;,&quot;Search or type web address&quot;,&quot;Search or enter URL&quot;,&quot;Type a message&quot;,&quot;Search YouTube&quot;,&quot;Say your thing&quot;,&quot;Write a message&quot;,&quot;Shantii.thedubb&quot;,&quot;Type search keywords&quot;,&quot;Type a messageâ€¦&quot;,&quot;Add text&quot;,&quot;Type something ...&quot;,&quot;Messageâ€¦&quot;,&quot;MessageÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦&quot;,&quot;6202004&quot;,&quot;ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢&quot;,&quot;Text message&quot;,&quot;SearchÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦&quot;,&quot;Searchâ€¦&quot;,&quot;Start a message&quot;,&quot;united.com&quot;,&quot;Search for a user&quot;, &quot;Type message&quot;,&quot;Type a messageâ€¦&quot;,&quot;Enter message&quot;)
+
+# Iterate through the list of items to be removed and filter it from the dataset
+
+for(i in stuff_to_remove){
+  raw_text_data &lt;- raw_text_data %&gt;% filter(!str_detect(text, i))
+}
+stored_data &lt;- raw_text_data</code></pre>
+<p>Well, we started out with 446,182 different messages, but after this process, we’re down to 414,375. Over 31,000 text massages alone were just artificially generated by apps–that’s over 7%! That could’ve added a lot of noise to the data, so it’s good we checked. There’s still PLENTY of processing to do. However, up until now, we’ve been working solely in R. While R is great for many things, I’ve found that Python offers a lot of tools for processing text data that R simply does not.</p>
+</div>
+</div>
+<div id="processing-in-python" class="section level2">
+<h2>Processing in Python</h2>
+<p>Let’s switch over to python. In order to do that, let’s use the feather package to transfer data files between R and Python.</p>
+<pre class="r"><code>library(feather)
+
+# we&#39;ll call it unprocessed_text_data and save it in the data folder within the larger project folder
+
+write_feather(raw_text_data, here(&quot;/data/unprocessed_text_data&quot;))</code></pre>
+<p>Okay, now that we’ve done that, let’s load the data into Python as a pandas dataframe.</p>
+<pre class="python"><code>import pandas as pd
+import feather
+
+data = pd.read_feather(&quot;/Users/Adam/Documents/github/text_processing/data/unprocessed_text_data&quot;)</code></pre>
+<p>Now let’s just do a sanity check and make sure that the data is what we think it is.</p>
+<pre class="python"><code>data.info()</code></pre>
+<pre><code>## &lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+## RangeIndex: 414375 entries, 0 to 414374
+## Data columns (total 5 columns):
+## participant_id    414375 non-null object
+## text              414375 non-null object
+## app               414375 non-null object
+## timestamp_est     414367 non-null datetime64[ns, UTC]
+## date              414367 non-null datetime64[ns, UTC]
+## dtypes: datetime64[ns, UTC](2), object(3)
+## memory usage: 15.8+ MB</code></pre>
+<div id="subsetting-social-texts" class="section level3">
+<h3>Subsetting Social Texts</h3>
+<p>Great, no surprises! For my particular analysis, I’m interested in text that was <em>only</em> entered into the keyboard on social communication apps (e.g., instagram, facebook, SMS). I’ve gone through and created a list of all the social communication apps in our dataset. I’ll use that list and filter out any text that is coming from non-social apps.</p>
+<pre class="python"><code>apps=[&quot;com.apple.MobileSMS.MessagesNotificationExtension&quot;,&quot;com.apple.MobileSMS&quot;,&quot;com.toyopagroup.picaboo&quot;,&quot;com.burbn.instagram&quot;,&quot;com.apple.MobileSMS.MessagesNotificationExtension&quot;,&quot;com.atebits.Tweetie2&quot;,&quot;com.facebook.Messenger&quot;,&quot;com.hookupdating&quot;,&quot;com.grindrguy.grindrx&quot;,&quot;com.groupme.iphone-app&quot;,&quot;com.gamerdelights.gamepigeon.ext&quot;,&quot;com.apple.mobilesms.compose&quot;,&quot;com.cardify.tinder&quot;,&quot;com.atebits.Tweetie2&quot;,&quot;com.reddit.Reddit&quot;,&quot;com.facebook.Facebook&quot;,&quot;com.burbn.instagram&quot;,&quot;com.facebook.katana&quot;,&quot;com.tumblr&quot;,&quot;tv.twitch.android.app&quot;,&quot;com.instagram.android&quot;,&quot;com.twitter.android&quot;,&quot;com.grindrguy.grindrx&quot;,&quot;com.Popshow.YOLO&quot;,&quot;net.whatsapp.WhatsApp&quot;,&quot;com.moxco.bumble&quot;,&quot;com.groupme.iphone-app.sharing-ext&quot;,&quot;com.apple.MailCompositionService&quot;,&quot;com.cardify.tinder&quot;,&quot;com.apple.mobilesms.compose&quot;,&quot;com.facebook.Messenger&quot;,&quot;com.apple.MobileSMS.MessagesNotificationExtension&quot;,&quot;com.apple.mobilemail&quot;,&quot;com.toyopagroup.picaboo&quot;,&quot;com.apple.MobileSMS&quot;,&quot;com.samsung.android.messaging&quot;,&quot;com.discord&quot;,&quot;com.snapchat.android&quot;,&quot;com.whatsapp&quot;,&quot;com.lipsisoftware.lipsi&quot;,&quot;com.facebook.orca&quot;,&quot;com.android.mms&quot;,&quot;com.google.android.talk&quot;,&quot;com.google.android.apps.messaging&quot;,&quot;com.google.Gmail&quot;,&quot;co.hinge.mobile.ios&quot;,&quot;com.htc.sense.mms&quot;,&quot;com.wemesh.android&quot;]
+
+data = data[data.app.isin(apps)]</code></pre>
+<p>A quick check shows that there are still 356,502 messages left after removing non-social keyboard entries. Over 86% of text that these teens are entering in their keyboard are within social communication apps. It looks as though the vast majority of text being entered into phones, at least in this sample of adolescents, are on social apps. I’ve created a simple stacked bargraph in R to depict this.</p>
+<pre class="r"><code>social_media &lt;-c(&quot;com.apple.MobileSMS.MessagesNotificationExtension&quot;,&quot;com.apple.MobileSMS&quot;,&quot;com.toyopagroup.picaboo&quot;,&quot;com.burbn.instagram&quot;,&quot;com.apple.MobileSMS.MessagesNotificationExtension&quot;,&quot;com.atebits.Tweetie2&quot;,&quot;com.facebook.Messenger&quot;,&quot;com.hookupdating&quot;,&quot;com.grindrguy.grindrx&quot;,&quot;com.groupme.iphone-app&quot;,&quot;com.gamerdelights.gamepigeon.ext&quot;,&quot;com.apple.mobilesms.compose&quot;,&quot;com.cardify.tinder&quot;,&quot;com.atebits.Tweetie2&quot;,&quot;com.reddit.Reddit&quot;,&quot;com.facebook.Facebook&quot;,&quot;com.burbn.instagram&quot;,&quot;com.facebook.katana&quot;,&quot;com.tumblr&quot;,&quot;tv.twitch.android.app&quot;,&quot;com.instagram.android&quot;,&quot;com.twitter.android&quot;,&quot;com.grindrguy.grindrx&quot;,&quot;com.Popshow.YOLO&quot;,&quot;net.whatsapp.WhatsApp&quot;,&quot;com.moxco.bumble&quot;,&quot;com.groupme.iphone-app.sharing-ext&quot;,&quot;com.apple.MailCompositionService&quot;,&quot;com.cardify.tinder&quot;,&quot;com.apple.mobilesms.compose&quot;,&quot;com.facebook.Messenger&quot;,&quot;com.apple.MobileSMS.MessagesNotificationExtension&quot;,&quot;com.apple.mobilemail&quot;,&quot;com.toyopagroup.picaboo&quot;,&quot;com.apple.MobileSMS&quot;,&quot;com.samsung.android.messaging&quot;,&quot;com.discord&quot;,&quot;com.snapchat.android&quot;,&quot;com.whatsapp&quot;,&quot;com.lipsisoftware.lipsi&quot;,&quot;com.facebook.orca&quot;,&quot;com.android.mms&quot;,&quot;com.google.android.talk&quot;,&quot;com.google.android.apps.messaging&quot;,&quot;com.google.Gmail&quot;,&quot;co.hinge.mobile.ios&quot;,&quot;com.htc.sense.mms&quot;,&quot;com.wemesh.android&quot;)
+
+raw_text_data$app_new &lt;- ifelse(raw_text_data$app %in% social_media,&quot;social&quot;,&quot;non-social&quot;)
+
+raw_text_data %&gt;%
+  group_by(app_new) %&gt;%
+  summarise(Percentage=n()) %&gt;%
+  mutate(Percentage=Percentage/sum(Percentage)*100) %&gt;%
+  mutate(text_source=&quot;text_source&quot;) %&gt;%
+  ggplot(aes(fill=app_new,y=Percentage,x=text_source)) +
+  geom_bar(position=&quot;stack&quot;,stat=&quot;identity&quot;,width=.25) +
+  theme(aspect.ratio = 2/1.9,legend.position = c(0.9, 0.5)) +
+  ylab(&quot;Percentage&quot;) +
+  xlab(&quot;Text Source&quot;) + 
+  scale_fill_discrete(labels = c(&#39;Non-Social Apps&#39;,&#39;Social Apps&#39;)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+  panel.background = element_blank(), axis.line = element_line(colour = &quot;black&quot;),axis.text.x=element_blank())</code></pre>
+<p><img src="/post/text_processing/Markdown/text_processing_tutorial_files/figure-html/creating%20a%20proportion%20graph-1.png" width="672" /></p>
+</div>
+<div id="cleaning-the-text-data" class="section level3">
+<h3>Cleaning the Text Data</h3>
+<div id="removing-emojis-and-other-odd-strings" class="section level4">
+<h4>Removing Emojis and Other Odd Strings</h4>
+<p>If you noticed earlier, there were a bunch of text messages that contained some weird characters (e.g., ðŸ˜). These characters are most likely emojis. Now, there’s a lot of things we can do with emojis, but for today we’re just going to remove them. I’ll probably make another post later on how we can incorporate emojis into our processing and subsequent analyses. For now, though, let’s get rid of them. First, we have to encode the characters into utf8. I’ve extracted a string with only the characters in order to demonstrate what the code is doing. The character string originally is “‘ðŸ’•ðŸ’•‘“. Let’s take a look at what the function encodes”’ðŸ’•ðŸ’•’” as.</p>
+<pre class="python"><code>encoded_data = data[&#39;text&#39;].apply(lambda x: x.encode(&#39;utf8&#39;,errors=&#39;backslashreplace&#39;))
+
+encoded_data[2035]</code></pre>
+<pre><code>## b&#39;\xc3\xb0\xc5\xb8\xe2\x80\x99\xe2\x80\xa2\xc3\xb0\xc5\xb8\xe2\x80\x99\xe2\x80\xa2&#39;</code></pre>
+<p>Okay! Now we can see that it’s encoded as a long string of characters with a b at the front. Now what we’re going to do is encode it as ascii and it and remove any instances of these odd strings of characters. As you can see, we’re left with an empty string (except for with a ‘b’ in front).</p>
+<pre class="python"><code>re_encoded_data= encoded_data.apply(lambda x: x.decode(&#39;unicode_escape&#39;,errors=&#39;backslashreplace&#39;).encode(&#39;ascii&#39;, &#39;ignore&#39;).strip())
+
+re_encoded_data[2035]</code></pre>
+<pre><code>## b&#39;&#39;</code></pre>
+<p>In order to get rid of the ‘b’, we have to decode the text back out of utf8. Now, when we print what was once “‘ðŸ’•ðŸ’•’”, we get a blank cell! Let’s make sure not to forget to put the processed text back into the dataframe</p>
+<pre class="python"><code>de_coded_data = re_encoded_data.apply(lambda x: x.decode(&#39;utf8&#39;))
+de_coded_data[2035]</code></pre>
+<pre><code>## &#39;&#39;</code></pre>
+<pre class="python"><code>data[&#39;text&#39;] = de_coded_data</code></pre>
+</div>
+<div id="removing-contractions" class="section level4">
+<h4>Removing Contractions</h4>
+<p>Another thing, before we get rid of special characters in the data, is to remove contractions like “can’t” and “won’t.” In order to do this, we can use the contractions library. If you supply a contraction to the function, like this <code>contraction.fix(&quot;won't&quot;)</code>, the output will be “will not”. But we want to make sure to do it to all of the contractions within the entire column, so we’ll have to apply a function to do that.</p>
+<pre class="python"><code>import contractions
+data[&#39;text&#39;] = data[&#39;text&#39;].apply(lambda x: [contractions.fix(word) for word in x.split()])
+data[&#39;text&#39;] = [&#39; &#39;.join(map(str,l)) for l in data[&#39;text&#39;]]</code></pre>
+<p><em>An important note</em>: I hope this is demonstrating why the order of steps taken during the processing of the data matters. If we were to remove special characters first (“can’t” becomes “cant”, and “we’re” becomes “were”), the contractions.fix() function would be relatively useless, as it uses those special characters to know when to expand the contractions.</p>
+</div>
+<div id="miscellaneous-cleaning" class="section level4">
+<h4>Miscellaneous Cleaning</h4>
+<p>Next, we’re going to do some standard processing procedures to the text. We’re going to 1) Remove all the special characters, 2) replace multiple spaces with a single space, 3) remove any ‘b’ prefixes if there are any, and change everything to lowercase. I will hash out options for removing single characters, but I’m not going to use them, as I think single character words will be important for my specific analyses.</p>
+<pre class="python"><code>import re
+for sentence in range(0, len(data.loc[:,&#39;text&#39;])):
+    # Remove all the special characters
+    processed_feature = re.sub(r&#39;\W&#39;, &#39; &#39;, str(data.loc[:,&#39;text&#39;].values[sentence]))
+
+    # remove all single characters
+    #processed_feature= re.sub(r&#39;\s+[a-zA-Z]\s+&#39;, &#39; &#39;, processed_feature)
+
+    # Remove single characters from the start
+    #processed_feature = re.sub(r&#39;\^[a-zA-Z]\s+&#39;, &#39; &#39;, processed_feature) 
+
+    # Substituting multiple spaces with single space
+    processed_feature = re.sub(r&#39;\s+&#39;, &#39; &#39;, processed_feature, flags=re.I)
+
+    # Removing prefixed &#39;b&#39;
+    processed_feature = re.sub(r&#39;^b\s+&#39;, &#39;&#39;, processed_feature)
+
+    # Converting to Lowercase
+    processed_feature = processed_feature.lower()
+
+    data.loc[:,&#39;text&#39;].values[sentence]= processed_feature</code></pre>
+</div>
+<div id="fixing-misspellings" class="section level4">
+<h4>Fixing Misspellings</h4>
+<p>Because this data is from keyboards, there are a LOT of typos currently. While there are a lot of ways to do this, I’ve (only slightly) adapted a script I found from <a href="&#39;https://davidkoh.me/understanding-the-basics-of-text-correction-in-the-context-of-ecommerce-search/&#39;">this wonderful blog</a>. Essentially, if you feed it a word like ‘alptop’ it will correct it to ‘laptop.’ While it’s not perfect, it seems to be best trade-off between accuracy and efficiency. Many of the options I tried were fast but inaccurate, or the opposite. For example machine learning would be very accurate, but take far too long.</p>
+<p>Ultimately, I decided to do use this text correction function because I think it’s important that “sorry” and “srory” be seen as the same thing (by correcting the latter). We might introduce a little noise into the data by incorrectly classifying some data, but after exploring the data, it’s clear that this is doing an overall good job of correcting misspellings.</p>
+<pre class="python"><code>from pyxdameraulevenshtein import damerau_levenshtein_distance
+# The frequent dictionary was obtained from https://github.com/wolfgarbe/symspell and is the intersection 
+# of Google Books Ngram Data and Spell Checker Oriented Word Lists
+# Download it directly here https://github.com/wolfgarbe/SymSpell/blob/master/SymSpell/frequency_dictionary_en_82_765.txt
+fname = &quot;/Users/Adam/Documents/github/text_processing/data/frequency_dictionary_en_82_765.txt&quot;
+dictionary = {}
+
+def get_deletes_list(w, delete_distance):
+    &quot;&quot;&quot;to return all possible combinations of the string with x number of deletes&quot;&quot;&quot;
+    master_deletes_list = []
+    queue = [w]
+    
+    for x in range(delete_distance):
+        temporary_queue = []
+        
+        for word in queue:
+            if len(word)&gt;delete_distance:
+                for c in range(len(word)):
+                    word_minus_c = word[:c] + word[c+1:]
+                    if word_minus_c not in master_deletes_list:
+                        master_deletes_list.append(word_minus_c)
+                    if word_minus_c not in temporary_queue:
+                        temporary_queue.append(word_minus_c)
+        queue = temporary_queue
+        
+    return master_deletes_list
+
+    
+def create_dictionary_entry(w,frequency):
+    &quot;&quot;&quot;
+    the dictionary will be in the format of {&quot;key&quot;:[[autocorrected word 1, autocorrected word 2, etc],frequency}
+    &quot;&quot;&quot;
+    #Add the word
+    if w not in dictionary:
+        dictionary[w] = [[w],frequency]   
+    else:
+        dictionary[w][0].append(w)
+        dictionary[w] = [dictionary[w][0],frequency]  
+    deletes_list = get_deletes_list(w,2)
+
+    for word in deletes_list:
+        if word not in dictionary:
+            dictionary[word] = [[w],0]
+        else:
+            dictionary[word][0].append(w)
+
+def create_dictionary(fname):
+    total_frequency =0
+    with open(fname) as file:
+        for line in file:
+            create_dictionary_entry(line.split()[0],line.split()[1])
+    for keyword in dictionary:
+        total_frequency += float(dictionary[keyword][1])
+    for keyword in dictionary:
+        dictionary[keyword].append(float(dictionary[keyword][1])/float(total_frequency))
+
+
+def get_suggestions(w):
+    search_deletes_list = get_deletes_list(w,2)
+    search_deletes_list.append(w)
+    candidate_corrections = []
+    
+    #Does not correct words which are existing in the dictionary and that has a high frequency based on the word corpus
+    if w in dictionary and int(dictionary[w][1])&gt;10000:
+        return [[w]]
+    else:
+        for query in search_deletes_list:
+            if query in dictionary:
+                for suggested_word in dictionary[query][0]:
+                        edit_distance = float(damerau_levenshtein_distance(w, suggested_word))
+                        frequency = float(dictionary[suggested_word][1])
+                        probability = float(dictionary[suggested_word][2])
+                        score = frequency*(0.003**(edit_distance))
+                        
+                        candidate_corrections.append((suggested_word,frequency,edit_distance,score))
+
+        candidate_corrections = sorted(candidate_corrections, key=lambda x:int(x[3]), reverse=True)
+        return candidate_corrections
+
+    
+def get_correction(w):
+    
+    try:
+        return get_suggestions(w)[0][0]
+    except:
+        return w
+
+    </code></pre>
+<p>Now that the function is defined, we can go ahead and run it to correct all of the misspellings! It would be nice if we could just do <code>get_corrections(data['text'])</code>, but unfortunately, that won’t work. Again, we’ll have to apply a function to apply it to all words within all cells within the column. Unfortunately, this function returns every cell like this: [‘this’,‘is’,‘one’,‘text’,‘message’], so we’ll have to apply another function in order bring all those pesky characters back into a single message, like this: [“this is one text message”].</p>
+<pre class="python"><code>data[&#39;text&#39;] = data[&#39;text&#39;].apply(lambda x: [get_correction(word) for word in x.split()])
+
+data[&#39;text&#39;] = [&#39; &#39;.join(map(str,l)) for l in data[&#39;text&#39;]]</code></pre>
+</div>
+</div>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>Okay! I know you haven’t been able to view the raw output of the data, but after following all of these steps, the text data has been thoroughly preprocessed. While there are other aspects of processing (such as stemming and tokenizing) that we haven’t done today, that’s because the subsequent analyses (which I will make another tutorial post for) so far have not called for it. Hopefully this was a helpful guide for anyone looking to process messy text data.</p>
+</div>
+
+    </div>
+
+    
+
+
+
+
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=/post/text_processing/markdown/text-processing-tutorial/&amp;text=A%20Guide%20To%20Processing%20Messy%20Text%20Data%20Collected%20From%20Mobile%20Phones" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=/post/text_processing/markdown/text-processing-tutorial/&amp;t=A%20Guide%20To%20Processing%20Messy%20Text%20Data%20Collected%20From%20Mobile%20Phones" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=A%20Guide%20To%20Processing%20Messy%20Text%20Data%20Collected%20From%20Mobile%20Phones&amp;body=/post/text_processing/markdown/text-processing-tutorial/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=/post/text_processing/markdown/text-processing-tutorial/&amp;title=A%20Guide%20To%20Processing%20Messy%20Text%20Data%20Collected%20From%20Mobile%20Phones" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://web.whatsapp.com/send?text=A%20Guide%20To%20Processing%20Messy%20Text%20Data%20Collected%20From%20Mobile%20Phones%20/post/text_processing/markdown/text-processing-tutorial/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=/post/text_processing/markdown/text-processing-tutorial/&amp;title=A%20Guide%20To%20Processing%20Messy%20Text%20Data%20Collected%20From%20Mobile%20Phones" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <img class="avatar mr-3 avatar-circle" src="/authors/admin/avatar_hu27f7dc34c9db8fd2b063f3fba6be9864_403025_270x270_fill_q90_lanczos_center.jpg" alt="Avatar">
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="/">Adam Pettitt</a></h5>
+      <h6 class="card-subtitle">Graduate Research Fellow</h6>
+      <p class="card-text">Clinical Psychology PhD student at the University of Oregon.</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="/#contact" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/adampettitt89" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://scholar.google.com/citations?user=f_ZO3qEAAAAJ&amp;hl=en" target="_blank" rel="noopener">
+        <i class="ai ai-google-scholar"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/pettitta" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://linkedin.com/in/pettitta" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="/files/resume.pdf" >
+        <i class="ai ai-cv"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+<section id="comments">
+  
+    
+<div id="disqus_thread"></div>
+<script>
+  let disqus_config = function () {
+    
+    
+    
+  };
+  (function() {
+    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+      document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+      return;
+    }
+    var d = document, s = d.createElement('script'); s.async = true;
+    s.src = 'https://' + "pettitta" + '.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+  
+</section>
+
+
+
+
+
+
+  
+  
+
+
+
+  </div>
+</article>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js" integrity="sha256-1zu+3BnLYV9LdiY85uXMzii3bdrkelyp37e0ZyTAQh0=" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/languages/r.min.js"></script>
+        
+      
+
+    
+
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js" integrity="sha256-EErZamuLefUnbMBQbsEqu1USa+btR2oIlCpBJbyD4/g=" crossorigin="anonymous"></script>
+    
+
+    
+    
+    <script>const code_highlighting = true;</script>
+    
+
+    
+    
+    
+    
+    
+    
+    <script>
+      const search_config = {"indexURI":"/index.json","minLength":1,"threshold":0.3};
+      const i18n = {"no_results":"No results found","placeholder":"Search...","results":"results found"};
+      const content_type = {
+        'post': "Posts",
+        'project': "Projects",
+        'publication' : "Publications",
+        'talk' : "Talks"
+        };
+    </script>
+    
+
+    
+    
+
+    
+    
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    <script id="dsq-count-scr" src="https://pettitta.disqus.com/count.js" async></script>
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    
+    
+    
+    <script src="/js/academic.min.0630fec5958cb075a5a38f042b3ddde6.js"></script>
+
+    
+
+
+
+
+
+
+  
+  
+  <div class="container">
+    <footer class="site-footer">
+  
+  <p class="powered-by">
+    
+      <a href="/privacy/">Privacy Policy</a>
+    
+    
+       &middot; 
+      <a href="/terms/">Terms</a>
+    
+  </p>
+  
+
+  <p class="powered-by">
+    
+
+    Powered by the
+    <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+    <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+    
+    <span class="float-right" aria-hidden="true">
+      <a href="#" class="back-to-top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+</footer>
+
+  </div>
+  
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
