@@ -2,15 +2,15 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Nick Allen | Academic</title>
-    <link>/authors/nick-allen/</link>
-      <atom:link href="/authors/nick-allen/index.xml" rel="self" type="application/rss+xml" />
+    <link>https://pettitta.github.io/authors/nick-allen/</link>
+      <atom:link href="https://pettitta.github.io/authors/nick-allen/index.xml" rel="self" type="application/rss+xml" />
     <description>Nick Allen</description>
     <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Mon, 01 Jan 2018 00:00:00 +0000</lastBuildDate>
     <item>
       <title>Maternal Parenting Mediates the Association Between Neighborhood Disadvantage and Adolescent Mental Health</title>
-      <link>/publication/ses-parenting/</link>
+      <link>https://pettitta.github.io/publication/ses-parenting/</link>
       <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
-      <guid>/publication/ses-parenting/</guid>
+      <guid>https://pettitta.github.io/publication/ses-parenting/</guid>
       <description>&lt;div class=&#34;alert alert-note&#34;&gt;
   &lt;div&gt;
     Click the &lt;em&gt;Cite&lt;/em&gt; button above to demo the feature to enable visitors to import publication metadata into their reference management software.
@@ -29,9 +29,9 @@
     
     <item>
       <title>The Association Between Chronotype, Internalizing Symptoms and Depressive Disorder During Adolescence: A Prospective, Multi-wave Longitudinal Study</title>
-      <link>/publication/chronotype-depression/</link>
+      <link>https://pettitta.github.io/publication/chronotype-depression/</link>
       <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
-      <guid>/publication/chronotype-depression/</guid>
+      <guid>https://pettitta.github.io/publication/chronotype-depression/</guid>
       <description>&lt;div class=&#34;alert alert-note&#34;&gt;
   &lt;div&gt;
     Click the &lt;em&gt;Cite&lt;/em&gt; button above to demo the feature to enable visitors to import publication metadata into their reference management software.
@@ -50,9 +50,9 @@
     
     <item>
       <title>Self-Reported Parenting Style Is Associated With Children’s Inflammation and Immune Activation</title>
-      <link>/publication/parenting-inflammation/</link>
+      <link>https://pettitta.github.io/publication/parenting-inflammation/</link>
       <pubDate>Mon, 03 Apr 2017 00:00:00 +0000</pubDate>
-      <guid>/publication/parenting-inflammation/</guid>
+      <guid>https://pettitta.github.io/publication/parenting-inflammation/</guid>
       <description>&lt;div class=&#34;alert alert-note&#34;&gt;
   &lt;div&gt;
     Click the &lt;em&gt;Cite&lt;/em&gt; button above to demo the feature to enable visitors to import publication metadata into their reference management software.

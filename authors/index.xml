@@ -2,144 +2,144 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Authors | Academic</title>
-    <link>/authors/</link>
-      <atom:link href="/authors/index.xml" rel="self" type="application/rss+xml" />
+    <link>https://pettitta.github.io/authors/</link>
+      <atom:link href="https://pettitta.github.io/authors/index.xml" rel="self" type="application/rss+xml" />
     <description>Authors</description>
     <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Tue, 23 Apr 2019 19:37:40 -0800</lastBuildDate>
     <item>
       <title>Adam Pettitt</title>
-      <link>/authors/adam-pettitt/</link>
+      <link>https://pettitta.github.io/authors/adam-pettitt/</link>
       <pubDate>Tue, 23 Apr 2019 19:37:40 -0800</pubDate>
-      <guid>/authors/adam-pettitt/</guid>
+      <guid>https://pettitta.github.io/authors/adam-pettitt/</guid>
       <description></description>
     </item>
     
     <item>
       <title></title>
-      <link>/authors/admin/</link>
+      <link>https://pettitta.github.io/authors/admin/</link>
       <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
-      <guid>/authors/admin/</guid>
+      <guid>https://pettitta.github.io/authors/admin/</guid>
       <description>&lt;p&gt;I am currently pursuing a PhD in Clinical Psychology at the University of Oregon. My research interests center around understanding and treating depression. One arm of research I am currently involved in is utilizing passive mobile sensing (e.g., text content, phone usage) in order to detect and prevent mental health and other health related events that would benefit from early interventions. I have additional interests in understanding how depression develops in adolescence, specifically in the brain, by utilizing functional and structural MRI data to elucidate the underlying mechanisms of this mental health disorder.&lt;/p&gt;
 </description>
     </item>
     
     <item>
       <title>Ali Cheetham</title>
-      <link>/authors/ali-cheetham/</link>
+      <link>https://pettitta.github.io/authors/ali-cheetham/</link>
       <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
-      <guid>/authors/ali-cheetham/</guid>
+      <guid>https://pettitta.github.io/authors/ali-cheetham/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Anna Mooney</title>
-      <link>/authors/anna-mooney/</link>
+      <link>https://pettitta.github.io/authors/anna-mooney/</link>
       <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
-      <guid>/authors/anna-mooney/</guid>
+      <guid>https://pettitta.github.io/authors/anna-mooney/</guid>
       <description></description>
     </item>
     
     <item>
       <title>John Trinder</title>
-      <link>/authors/john-trinder/</link>
+      <link>https://pettitta.github.io/authors/john-trinder/</link>
       <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
-      <guid>/authors/john-trinder/</guid>
+      <guid>https://pettitta.github.io/authors/john-trinder/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Julian Simmons</title>
-      <link>/authors/julian-simmons/</link>
+      <link>https://pettitta.github.io/authors/julian-simmons/</link>
       <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
-      <guid>/authors/julian-simmons/</guid>
+      <guid>https://pettitta.github.io/authors/julian-simmons/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Lisa Sheeber</title>
-      <link>/authors/lisa-sheeber/</link>
+      <link>https://pettitta.github.io/authors/lisa-sheeber/</link>
       <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
-      <guid>/authors/lisa-sheeber/</guid>
+      <guid>https://pettitta.github.io/authors/lisa-sheeber/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Michelle Byrne</title>
-      <link>/authors/michelle-byrne/</link>
+      <link>https://pettitta.github.io/authors/michelle-byrne/</link>
       <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
-      <guid>/authors/michelle-byrne/</guid>
+      <guid>https://pettitta.github.io/authors/michelle-byrne/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Nick Allen</title>
-      <link>/authors/nick-allen/</link>
+      <link>https://pettitta.github.io/authors/nick-allen/</link>
       <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
-      <guid>/authors/nick-allen/</guid>
+      <guid>https://pettitta.github.io/authors/nick-allen/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Orli Schwartz</title>
-      <link>/authors/orli-schwartz/</link>
+      <link>https://pettitta.github.io/authors/orli-schwartz/</link>
       <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
-      <guid>/authors/orli-schwartz/</guid>
+      <guid>https://pettitta.github.io/authors/orli-schwartz/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Owen Spear</title>
-      <link>/authors/owen-spear/</link>
+      <link>https://pettitta.github.io/authors/owen-spear/</link>
       <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
-      <guid>/authors/owen-spear/</guid>
+      <guid>https://pettitta.github.io/authors/owen-spear/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Paul Dudgeon</title>
-      <link>/authors/paul-dudgeon/</link>
+      <link>https://pettitta.github.io/authors/paul-dudgeon/</link>
       <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
-      <guid>/authors/paul-dudgeon/</guid>
+      <guid>https://pettitta.github.io/authors/paul-dudgeon/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Sarah Whittle</title>
-      <link>/authors/sarah-whittle/</link>
+      <link>https://pettitta.github.io/authors/sarah-whittle/</link>
       <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
-      <guid>/authors/sarah-whittle/</guid>
+      <guid>https://pettitta.github.io/authors/sarah-whittle/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Craig Olsson</title>
-      <link>/authors/craig-olsson/</link>
+      <link>https://pettitta.github.io/authors/craig-olsson/</link>
       <pubDate>Mon, 03 Apr 2017 00:00:00 +0000</pubDate>
-      <guid>/authors/craig-olsson/</guid>
+      <guid>https://pettitta.github.io/authors/craig-olsson/</guid>
       <description></description>
     </item>
     
     <item>
       <title>George Patton</title>
-      <link>/authors/george-patton/</link>
+      <link>https://pettitta.github.io/authors/george-patton/</link>
       <pubDate>Mon, 03 Apr 2017 00:00:00 +0000</pubDate>
-      <guid>/authors/george-patton/</guid>
+      <guid>https://pettitta.github.io/authors/george-patton/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Lisa Mundy</title>
-      <link>/authors/lisa-mundy/</link>
+      <link>https://pettitta.github.io/authors/lisa-mundy/</link>
       <pubDate>Mon, 03 Apr 2017 00:00:00 +0000</pubDate>
-      <guid>/authors/lisa-mundy/</guid>
+      <guid>https://pettitta.github.io/authors/lisa-mundy/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Paul Badcock</title>
-      <link>/authors/paul-badcock/</link>
+      <link>https://pettitta.github.io/authors/paul-badcock/</link>
       <pubDate>Mon, 03 Apr 2017 00:00:00 +0000</pubDate>
-      <guid>/authors/paul-badcock/</guid>
+      <guid>https://pettitta.github.io/authors/paul-badcock/</guid>
       <description></description>
     </item>
     

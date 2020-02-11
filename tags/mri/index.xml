@@ -2,29 +2,29 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>MRI | Academic</title>
-    <link>/tags/mri/</link>
-      <atom:link href="/tags/mri/index.xml" rel="self" type="application/rss+xml" />
+    <link>https://pettitta.github.io/tags/mri/</link>
+      <atom:link href="https://pettitta.github.io/tags/mri/index.xml" rel="self" type="application/rss+xml" />
     <description>MRI</description>
     <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Tue, 23 Apr 2019 19:37:40 -0800</lastBuildDate>
     <image>
       <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
       <title>MRI</title>
-      <link>/tags/mri/</link>
+      <link>https://pettitta.github.io/tags/mri/</link>
     </image>
     
     <item>
       <title>Longitudinal MRI Power Analysis Calculator</title>
-      <link>/project/longitudinal-mri/</link>
+      <link>https://pettitta.github.io/project/longitudinal-mri/</link>
       <pubDate>Tue, 23 Apr 2019 19:37:40 -0800</pubDate>
-      <guid>/project/longitudinal-mri/</guid>
+      <guid>https://pettitta.github.io/project/longitudinal-mri/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Neuroimaging Pipeline</title>
-      <link>/project/neuroimaging-pipeline/</link>
+      <link>https://pettitta.github.io/project/neuroimaging-pipeline/</link>
       <pubDate>Tue, 23 Apr 2019 19:37:40 -0800</pubDate>
-      <guid>/project/neuroimaging-pipeline/</guid>
+      <guid>https://pettitta.github.io/project/neuroimaging-pipeline/</guid>
       <description></description>
     </item>
     

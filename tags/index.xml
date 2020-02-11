@@ -2,117 +2,117 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags | Academic</title>
-    <link>/tags/</link>
-      <atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <link>https://pettitta.github.io/tags/</link>
+      <atom:link href="https://pettitta.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     <description>Tags</description>
     <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sat, 08 Feb 2020 00:00:00 +0000</lastBuildDate>
     <image>
       <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
       <title>Tags</title>
-      <link>/tags/</link>
+      <link>https://pettitta.github.io/tags/</link>
     </image>
     
     <item>
       <title>Guide</title>
-      <link>/tags/guide/</link>
+      <link>https://pettitta.github.io/tags/guide/</link>
       <pubDate>Sat, 08 Feb 2020 00:00:00 +0000</pubDate>
-      <guid>/tags/guide/</guid>
+      <guid>https://pettitta.github.io/tags/guide/</guid>
       <description></description>
     </item>
     
     <item>
       <title>NLP</title>
-      <link>/tags/nlp/</link>
+      <link>https://pettitta.github.io/tags/nlp/</link>
       <pubDate>Sat, 08 Feb 2020 00:00:00 +0000</pubDate>
-      <guid>/tags/nlp/</guid>
+      <guid>https://pettitta.github.io/tags/nlp/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Processing</title>
-      <link>/tags/processing/</link>
+      <link>https://pettitta.github.io/tags/processing/</link>
       <pubDate>Sat, 08 Feb 2020 00:00:00 +0000</pubDate>
-      <guid>/tags/processing/</guid>
+      <guid>https://pettitta.github.io/tags/processing/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Text</title>
-      <link>/tags/text/</link>
+      <link>https://pettitta.github.io/tags/text/</link>
       <pubDate>Sat, 08 Feb 2020 00:00:00 +0000</pubDate>
-      <guid>/tags/text/</guid>
+      <guid>https://pettitta.github.io/tags/text/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Text Analysis</title>
-      <link>/tags/text-analysis/</link>
+      <link>https://pettitta.github.io/tags/text-analysis/</link>
       <pubDate>Sat, 08 Feb 2020 00:00:00 +0000</pubDate>
-      <guid>/tags/text-analysis/</guid>
+      <guid>https://pettitta.github.io/tags/text-analysis/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Tutorial</title>
-      <link>/tags/tutorial/</link>
+      <link>https://pettitta.github.io/tags/tutorial/</link>
       <pubDate>Sat, 08 Feb 2020 00:00:00 +0000</pubDate>
-      <guid>/tags/tutorial/</guid>
+      <guid>https://pettitta.github.io/tags/tutorial/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Adolescent</title>
-      <link>/tags/adolescent/</link>
+      <link>https://pettitta.github.io/tags/adolescent/</link>
       <pubDate>Thu, 23 Jan 2020 00:00:00 +0000</pubDate>
-      <guid>/tags/adolescent/</guid>
+      <guid>https://pettitta.github.io/tags/adolescent/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Depression</title>
-      <link>/tags/depression/</link>
+      <link>https://pettitta.github.io/tags/depression/</link>
       <pubDate>Thu, 23 Jan 2020 00:00:00 +0000</pubDate>
-      <guid>/tags/depression/</guid>
+      <guid>https://pettitta.github.io/tags/depression/</guid>
       <description></description>
     </item>
     
     <item>
       <title>MAPS</title>
-      <link>/tags/maps/</link>
+      <link>https://pettitta.github.io/tags/maps/</link>
       <pubDate>Thu, 23 Jan 2020 00:00:00 +0000</pubDate>
-      <guid>/tags/maps/</guid>
+      <guid>https://pettitta.github.io/tags/maps/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Passive Mobile Sensing</title>
-      <link>/tags/passive-mobile-sensing/</link>
+      <link>https://pettitta.github.io/tags/passive-mobile-sensing/</link>
       <pubDate>Thu, 23 Jan 2020 00:00:00 +0000</pubDate>
-      <guid>/tags/passive-mobile-sensing/</guid>
+      <guid>https://pettitta.github.io/tags/passive-mobile-sensing/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Statistics</title>
-      <link>/tags/statistics/</link>
+      <link>https://pettitta.github.io/tags/statistics/</link>
       <pubDate>Thu, 23 Jan 2020 00:00:00 +0000</pubDate>
-      <guid>/tags/statistics/</guid>
+      <guid>https://pettitta.github.io/tags/statistics/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Suicide</title>
-      <link>/tags/suicide/</link>
+      <link>https://pettitta.github.io/tags/suicide/</link>
       <pubDate>Thu, 23 Jan 2020 00:00:00 +0000</pubDate>
-      <guid>/tags/suicide/</guid>
+      <guid>https://pettitta.github.io/tags/suicide/</guid>
       <description></description>
     </item>
     
     <item>
       <title>MRI</title>
-      <link>/tags/mri/</link>
+      <link>https://pettitta.github.io/tags/mri/</link>
       <pubDate>Tue, 23 Apr 2019 19:37:40 -0800</pubDate>
-      <guid>/tags/mri/</guid>
+      <guid>https://pettitta.github.io/tags/mri/</guid>
       <description></description>
     </item>
     
